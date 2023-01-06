@@ -1,0 +1,148 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>과실비율확인</title>
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href = "{% static 'static01/css/styles.css' %}" rel = "stylesheet"/>
+        <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            }
+        .service{
+            position: relative;
+            width: 400px;
+            left: 50%;
+            top: 400px;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            }
+        select{
+            width: 400px;
+            height: 32px;
+            font-size: 15px;
+            border: 1px solid black;
+            border-radius: 15px;
+            }
+        footer{
+            position:static;
+            left:0px;
+            bottom:0px;
+            width: 100%;
+            }
+        .check{
+            width: 300px;
+            height: 40px;
+            font-size: 15px;
+            color: white;
+            background-color: #14279B;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="#!">수리하삼</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" onclick="location.href='{%url 'index'%}'">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <form method="post">{%csrf_token%}
+                            <li class="nav-item"><a class="nav-link" type=submit onclick="location.href='{%url 'logout'%}'" style="color:#14279B;">Logout</a></li>
+                        </form>
+                    </ul>
+                    <form class="d-flex">
+                        <button class="btn btn-outline-dark" type="submit" onclick="admin();">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3934/3934107.png" width="25px">
+                            Admin
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">과실비율 알아보기</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">사고상황에 따른 과실비율을 확인합니다.
+                    <br>정형사고의 기본 과실비율을 안내합니다.</p>
+                </div>
+            </div>
+        </header>
+        <!-- Section-->
+        <div class="service">
+            <p>1. 사고 상대를 선택해주세요.</p>
+            <select name="select01">
+                <option value="car">차 대 차</option>
+                <option value="highway">고속도로</option>
+                <option value="human">차 대 사람</option>
+                <option value="motorcycle">차 대 이륜차</option>
+                <option value="bike">차 대 자전거</option>
+            </select><br><br><br>
+            <p>2. 사고 장소(차도유형)는 어디였나요?</p>
+            <select name="select02">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select><br><br><br>
+            <p>3. 사고 장소(떠는 형태)의 특징은 무엇인가요?</p>
+            <select name="select03">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select><br><br><br>
+            <p>4. 본인(또는 상대방) 자동차 A는 어떻게 진행하였나요?</p>
+            <select name="select04">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select><br><br><br>
+            <p>5. 상대방(또는 본인) 자동차 B는 어떻게 진행하였나요?</p>
+            <select name="select05">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <br><br>
+            <button type="button" class="check">과실비율 확인하기</button>
+        </div><br><br><br><br><br><br>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2022</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'static01/js/scripts.js'%}"></script>
+        {%if request.user.is_superuser%}
+            <script>
+                function admin(){
+                    window.location.href='{%url 'admin01'%}';
+                    }
+            </script>
+        {%else%}
+            <script>
+                function admin(){
+                    alert("관리자 계정으로 로그인 하십시오.");
+                    }
+            </script>
+        {%endif%}
+    </body>
+</html>
