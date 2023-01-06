@@ -119,4 +119,4 @@ def usage(request):
     return render(request, 'usage.html')
 
 def user(request):
-    return render(request, 'user.html')
+    return render(request, 'user.html', {'list' : User.objects.all()})
