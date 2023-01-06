@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    {% load static %}
+    
+</head>
+<body>
+    <script>function srhCodeValue1() {
+        var categoryCode = $("input[name=dataGbn]:checked").val();
+
+        if (categoryCode == 1) {
+            $("#select_txt1").text("① 사고 장소(차도유형)는 어디였나요?");
+            $("#select_txt2").text("② 사고 장소(또는 형태)의 특징은 무엇인가요?");
+            $("#select_txt3").html("③ 본인(또는 상대방) <font style='color:#f16953;'><strong>자동차 A</strong></font>는 어떻게 진행하였나요?");
+            $("#select_txt4").html("④ 상대방(또는 본인) <font style='color:#ffb400;'><strong>자동차 B</strong></font>는 어떻게 진행하였나요?");
+        } else if (categoryCode == 2) {
+            $("#select_txt1").text("① 사고 장소(차도유형)는 어디였나요?");
+            $("#select_txt2").text("② 사고 장소(또는 형태)의 특징은 무엇인가요?");
+            $("#select_txt3").html("③ 본인(또는 상대방) <font style='color:#f16953;'><strong>자동차 A</strong></font>는 어떻게 진행하였나요?");
+            $("#select_txt4").html("④ 상대방(또는 본인) <font style='color:#ffb400;'><strong>자동차 B</strong></font>는 어떻게 진행하였나요?");
+        } else if (categoryCode == 3) {
+            $("#select_txt1").text("① 사고 장소(횡단보도 관련)는 어디였나요?");
+            $("#select_txt2").text("② 사고 장소(또는 형태)의 특징은 무엇인가요?");
+            $("#select_txt3").text("③ 사람은 어떻게 걸어가고 있었나요?");
+            $("#select_txt4").text("④ 자동차은 어떻게 진행하고 있었나요?");
+        } else if (categoryCode == 4) {
+            $("#select_txt1").text("① 사고 장소(차도유형)는 어디였나요?");
+            $("#select_txt2").text("② 사고 장소(또는 형태)의 특징은 무엇인가요?");
+            $("#select_txt3").text("③ 이륜차는 어떻게 진행하고 있었나요?");
+            $("#select_txt4").text("④ 자동차은 어떻게 진행하고 있었나요?");
+        } else if (categoryCode == 5) {
+            $("#select_txt1").text("① 사고 장소(차도유형)는 어디였나요?");
+            $("#select_txt2").text("② 사고 장소(또는 형태)의 특징은 무엇인가요?");
+            $("#select_txt3").text("③ 자전거는 어떻게 진행하고 있었나요?");
+            $("#select_txt4").text("④ 자동차은 어떻게 진행하고 있었나요?");
+        }
+
+        if (categoryCode == 1) {
+            $("#codeValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>본인(또는 상대방) 자동차 A</font></option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차 B</font></option>");
+        } else if (categoryCode == 2) {
+            $("#codeValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>본인(또는 상대방) 자동차 A</font></option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차 B</font></option>");
+        } else if (categoryCode == 3) {
+            $("#codeValue1").find("option").remove().end().append("<option value=''>사고 장소(횡단보도 관련)</option>");
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>사람</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 4) {
+            $("#codeValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>오토바이</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 5) {
+            $("#codeValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>자전거</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        }
+
+        $.ajax({
+            type : 'POST',
+            url : '/selectCodeList1',
+            data : {
+                acdNttyDsCode : categoryCode
+            },
+            success : function(result) {
+                if (result.length != 0) {
+                    $(result).each(function(i) {
+                        $("#codeValue1").append("<option value='" + result[i].acdSrhCode + "'>" + result[i].acdSrhCodeNm + "</option>");
+                    })
+                }
+            },
+            error : function(e) {
+                alert("조회 중 오류가 발생하였습니다.");
+            }
+        });
+    }
+    function srhCodeValue2() {
+        var categoryCode = $("input[name=dataGbn]:checked").val();
+        var valCode1 = $("#codeValue1").val();
+
+        if (categoryCode == 1) {
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>본인(또는 상대방) 자동차</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차</option>");
+        } else if (categoryCode == 2) {
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>본인(또는 상대방) 자동차</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차</option>");
+        } else if (categoryCode == 3) {
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>사람</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 4) {
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>오토바이</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 5) {
+            $("#codeValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+            $("#codeValue3").find("option").remove().end().append("<option value=''>자전거</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        }
+        $.ajax({
+            type : 'POST',
+            url : '/selectCodeList2',
+            data : {
+                acdNttyDsCode : categoryCode,
+                acdPlaceCodeA : valCode1
+            },
+            success : function(result) {
+                if (result.length != 0) {
+                    $(result).each(function(i) {
+                        $("#codeValue2").append("<option value='" + result[i].acdSrhCode + "'>" + result[i].acdSrhCodeNm + "</option>");
+                    })
+                }
+            },
+            error : function(e) {
+                alert("조회 중 오류가 발생하였습니다.");
+            }
+        });
+    }
+    function srhCodeValue3() {
+        var categoryCode = $("input[name=dataGbn]:checked").val();
+        var valCode1 = $("#codeValue1").val();
+        var valCode2 = $("#codeValue2").val();
+
+        if (categoryCode == 1) {
+            $("#codeValue3").find("option").remove().end().append("<option value=''>본인(또는 상대방) 자동차</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차</option>");
+        } else if (categoryCode == 2) {
+            $("#codeValue3").find("option").remove().end().append("<option value=''>본인(또는 상대방) 자동차</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차</option>");
+        } else if (categoryCode == 3) {
+            $("#codeValue3").find("option").remove().end().append("<option value=''>사람</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 4) {
+            $("#codeValue3").find("option").remove().end().append("<option value=''>오토바이</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 5) {
+            $("#codeValue3").find("option").remove().end().append("<option value=''>자전거</option>");
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        }
+
+        $.ajax({
+            type : 'POST',
+            url : '/selectCodeList3',
+            data : {
+                acdNttyDsCode : categoryCode,
+                acdPlaceCodeA : valCode1,
+                acdPlaceCodeB : valCode2
+            },
+            success : function(result) {
+                if (result.length != 0) {
+                    $(result).each(function(i) {
+                        $("#codeValue3").append("<option value='" + result[i].acdSrhCode + "'>" + result[i].acdSrhCodeNm + "</option>");
+                    })
+                }
+            },
+            error : function(e) {
+                alert("조회 중 오류가 발생하였습니다.");
+            }
+        });
+    }
+    function srhCodeValue4() {
+        var categoryCode = $("input[name=dataGbn]:checked").val();
+        var valCode1 = $("#codeValue1").val();
+        var valCode2 = $("#codeValue2").val();
+        var valCode3 = $("#codeValue3").val();
+
+        if (categoryCode == 1) {
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차</option>");
+        } else if (categoryCode == 2) {
+            $("#codeValue4").find("option").remove().end().append("<option value=''>상대방(또는 본인) 자동차</option>");
+        } else if (categoryCode == 3) {
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 4) {
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        } else if (categoryCode == 5) {
+            $("#codeValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+        }
+
+        $.ajax({
+            type : 'POST',
+            url : '/selectCodeList4',
+            data : {
+                acdNttyDsCode : categoryCode,
+                acdPlaceCodeA : valCode1,
+                acdPlaceCodeB : valCode2,
+                acdTargetA : valCode3
+            },
+            success : function(result) {
+                if (result.length != 0) {
+                    $(result).each(function(i) {
+                        $("#codeValue4").append("<option value='" + result[i].acdSrhCode + "'>" + result[i].acdSrhCodeNm + "</option>");
+                    })
+                }
+            },
+            error : function(e) {
+                alert("조회 중 오류가 발생하였습니다.");
+            }
+        });
+    }
+
+    function srhSelectAccidentRate() {
+        
+        $("html, body").animate({scrollTop : 0}, 400);
+        
+        var categoryCode = $("input[name=dataGbn]:checked").val();
+        var valCode1 = $("#codeValue1").val();
+        var valCode2 = $("#codeValue2").val();
+        var valCode3 = $("#codeValue3").val();
+        var valCode4 = $("#codeValue4").val();
+
+        if (valCode4 == "") {
+            $("#result_all").hide();
+            $("#result_empty").hide();
+            alert("사고상황을 선택해주세요.");
+            return;
+        }
+
+        $.ajax({type : 'POST',
+            url : '/selectAccidentRate',
+            data : {
+                acdNttyDsCode : categoryCode,
+                acdNttyDsCode : categoryCode,
+                acdPlaceCodeA : valCode1,
+                acdPlaceCodeB : valCode2,
+                acdTargetA : valCode3,
+                acdTargetB : valCode4
+            },
+            success : function(result) {
+                if (result.length == 0) {
+                    $("#result_all").hide();
+                    return;
+                }
+
+                $(".inners").empty();
+
+                var html = "";
+
+                $(result).each(function(i) {
+                    html += "<div class=\"innersection\">";
+                    if (i == 0) {
+                        html += "<div class=\"result_top_frm\">";
+                        if (categoryCode == 1 || categoryCode == 2) {
+                            html += "<div class=\"result_top_title1\">사고 장소(차도 유형)</div>";
+                        } else if (categoryCode == 3) {
+                            html += "<div class=\"result_top_title1\">사고 장소(횡단보도 관련)</div>";
+                        } else if (categoryCode == 4) {
+                            html += "<div class=\"result_top_title1\">사고 장소(차도 유형)</div>";
+                        } else if (categoryCode == 5) {
+                            html += "<div class=\"result_top_title1\">사고 장소(차도 유형)</div>";
+                        }
+                        html += "<div class=\"result_top_loc\">" + result[i].acdPlaceCodeA + "</div>";
+                        html += "<div class=\"result_top_title2\">사고 장소(또는 형태) 특징</div>";
+                        html += "<div class=\"result_top_loc\">" + result[i].acdPlaceCodeB + "</div>";
+                        html += "</div>";
+                    } else if (i > 0 && result[i].acdPlaceCodeB != result[i - 1].acdPlaceCodeB) {
+                        html += "<div class=\"result_top_frm\">";
+                        if (categoryCode == 1 || categoryCode == 2) {
+                            html += "<div class=\"result_top_title1\">사고 장소(차도 유형)</div>";
+                        } else if (categoryCode == 3) {
+                            html += "<div class=\"result_top_title1\">사고 장소(횡단보도 관련)</div>";
+                        } else if (categoryCode == 4) {
+                            html += "<div class=\"result_top_title1\">사고 장소(차도 유형)</div>";
+                        } else if (categoryCode == 5) {
+                            html += "<div class=\"result_top_title1\">사고 장소(차도 유형)</div>";
+                        }
+                        html += "<div class=\"result_top_loc\">" + result[i].acdPlaceCodeA + "</div>";
+                        html += "<div class=\"result_top_title2\">사고 장소(또는 형태) 특징</div>";
+                        html += "<div class=\"result_top_loc\">" + result[i].acdPlaceCodeB + "</div>";
+                        html += "</div>";
+                    }
+
+                    html += "<div class=\"result_btm_frm\">";
+
+                    if (i == 0) {
+                        html += "<table class=\"result_btm_table\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" summary=\"간편검색 결과보기\" style=\"table-layout: fixed;\">";
+                        html += "<caption>간편검색 결과보기</caption>";
+                    } else {
+                        html += "<table class=\"result_btm_table2\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" summary=\"간편검색 결과보기\" style=\"table-layout: fixed;\">";
+                        html += "<caption>간편검색 결과보기</caption>";
+                    }
+                    html += "<colgroup>";
+                    html += "	<col width=\"18%\">";
+                    html += "	<col width=\"29%\">";
+                    html += "	<col width=\"29%\">";
+                    html += "	<col width=\"12%\">";
+                    html += "	<col width=\"12%\">";
+                    html += "</colgroup>";
+                    html += "<thead>";
+                    if (i == 0 || result[i].acdPlaceCodeB != result[i - 1].acdPlaceCodeB) {
+                        html += "<th>도표번호</th>";
+                        if (categoryCode == 1 || categoryCode == 2) {
+                            html += "<th><font style='color:#f16953;'>자동차 A</font><br>진행경로</th>";
+                            html += "<th><font style='color:#ffb400;'>자동차 B</font><br>진행경로</th>";
+                        } else if (categoryCode == 3) {
+                            html += "<th>보행자<br>진행경로</th>";
+                            html += "<th>자동차<br>진행경로</th>";
+                        } else if (categoryCode == 4) {
+                            html += "<th>오토바이<br>진행경로</th>";
+                            html += "<th>자동차<br>진행경로</th>";
+                        } else if (categoryCode == 5) {
+                            html += "<th>자전거<br>진행경로</th>";
+                            html += "<th>자동차<br>진행경로</th>";
+                        }
+                        if (categoryCode == 1 || categoryCode == 2) {
+                            html += "<th><font style='color:#f16953;'>A</font><br>과실</th>";
+                        } else if (categoryCode == 3) {
+                            html += "<th>보행자<br>과실</th>";
+                        } else if (categoryCode == 4) {
+                            html += "<th>오토바이<br>과실</th>";
+                        } else if (categoryCode == 5) {
+                            html += "<th>자전거<br>과실</th>";
+                        }
+                        if (categoryCode == 1 || categoryCode == 2) {
+                            html += "<th><font style='color:#ffb400;'>B</font><br>과실</th>";
+                        } else {
+                            html += "<th>자동차<br>과실</th>";
+                        }
+                    }
+// 						console.log("srhSelectAccidentRate result = ", result[i]);
+                    html += "</thead>";
+                    html += "<tbody>";
+                    html += "	<tr>";
+                    html += "		<td><div onclick=\"javascript:checkChartNo(" + "'" + result[i].chartNo + "'," + "'" + result[i].caracdsittnno + "'" + ")\" onmouseover='javascript:thumbnailShow(\"" + result[i].chartNo + "\");\' onmouseout='javascript:thumbnailHide(\"" + result[i].chartNo + "\");'><a href=\"#\" style=\"color:blue;font-weight:bold;\">" + result[i].chartNo + "<a></div></td>";
+                    html += "		<td class=\"mobileTdLeft\">" + result[i].acdTargetA + "</td>";
+                    html += "		<td class=\"mobileTdLeft\">" + result[i].acdTargetB + "</td>";
+                    html += "		<td>" + result[i].fltRtA + "</td>";
+                    html += "		<td>" + result[i].fltRtB + "</font></td>";
+                    html += "	</tr>";
+                    html += "</tbody>";
+                    html += "</table>";
+
+                    html += "</div>";
+
+                    html += "</div>";
+                    html += "<div class=\"mcap_img\" id=\"capture"+result[i].chartNo+"\"><img id=\""+result[i].chartNo+"\" src=\"/images/capture/"+result[i].thumbnailNm+".PNG\" alt=\"관련사고 썸네일이미지\" />";
+
+                });
+                $(".inners").append(html);
+                $("#result_all").show();
+                /* paging(); */
+            },
+            error : function(e) {
+                alert("조회 중 오류가 발생하였습니다.");
+            }
+        });
+    }</script>
+</body>
+</html>

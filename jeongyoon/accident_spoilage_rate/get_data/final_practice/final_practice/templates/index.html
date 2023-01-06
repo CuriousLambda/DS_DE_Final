@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    {% load static %}
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+    </script>
+    <script>
+        function changeMainCode() {
+            var mainCode = document.querySelector('input[name=radioData]:checked').value;
+            // https://www.techiedelight.com/ko/get-value-of-checkbox-with-javascript/
+	
+			if (mainCode == 1) {
+                document.getElementById("selectBox1").innerText = "① 사고 장소(차도유형)는 어디였나요?";
+                document.getElementById("selectBox2").innerText = "② 사고 장소(또는 형태)의 특징은 무엇인가요?"
+                document.getElementById("selectBox3").innerHTML = "③ <font style='color:#EA6816;'><strong>본인의 자동차</strong></font>는 어떻게 진행하였나요?"
+                document.getElementById("selectBox4").innerHTML = "④ <font style='color:#ECE865;'><strong>상대방의 자동차</strong></font>는 어떻게 진행하였나요?"
+			} else if (mainCode == 2) {
+                document.getElementById("selectBox1").innerText = "① 사고 장소(차도유형)는 어디였나요?"
+                document.getElementById("selectBox2").innerText = "② 사고 장소(또는 형태)의 특징은 무엇인가요?"
+                document.getElementById("selectBox3").innerHTML = "③ <font style='color:#EA6816;'><strong>본인의 자동차</strong></font>는 어떻게 진행하였나요?"
+                document.getElementById("selectBox4").innerHTML = "④ <font style='color:#ECE865;'><strong>상대방의 자동차</strong></font>는 어떻게 진행하였나요?"
+			} else if (mainCode == 3) {
+                document.getElementById("selectBox1").innerText = "① 사고 장소(횡단보도 관련)는 어디였나요?"
+                document.getElementById("selectBox2").innerText = "② 사고 장소(또는 형태)의 특징은 무엇인가요?"
+                document.getElementById("selectBox3").innerText = "③ 사람은 어떻게 걸어가고 있었나요?"
+                document.getElementById("selectBox4").innerText = "④ 자동차은 어떻게 진행하고 있었나요?"
+			} else if (mainCode == 4) {
+                document.getElementById("selectBox1").innerText = "① 사고 장소(차도유형)는 어디였나요?"
+                document.getElementById("selectBox2").innerText = "② 사고 장소(또는 형태)의 특징은 무엇인가요?"
+                document.getElementById("selectBox3").innerText = "③ 이륜차는 어떻게 진행하고 있었나요?"
+                document.getElementById("selectBox4").innerText = "④ 자동차은 어떻게 진행하고 있었나요?"
+			} else if (mainCode == 5) {
+                document.getElementById("selectBox1").innerText = "① 사고 장소(차도유형)는 어디였나요?"
+                document.getElementById("selectBox2").innerText = "② 사고 장소(또는 형태)의 특징은 무엇인가요?"
+                document.getElementById("selectBox3").innerText = "③ 자전거는 어떻게 진행하고 있었나요?"
+                document.getElementById("selectBox4").innerText = "④ 자동차은 어떻게 진행하고 있었나요?"
+			}
+
+            if (mainCode == 1) {
+				$("#selectValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>본인 자동차 A</font></option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 2) {
+				$("#selectValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>본인 자동차 A</font></option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 3) {
+				$("#selectValue1").find("option").remove().end().append("<option value=''>사고 장소(횡단보도 관련)</option>");
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>사람</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 4) {
+				$("#selectValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>오토바이</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 5) {
+				$("#selectValue1").find("option").remove().end().append("<option value=''>사고 장소(차도 유형)</option>");
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>자전거</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			}
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "/test1",
+                data: {
+                    data: mainCode
+                    
+                },
+                success: function(response) {
+                    const keys = Object.keys(response);
+                    console.log(response)
+                    // var selectLength = document.getElementById("selectValue1");
+                    // while (selectLength.length > 0) {
+                    // selectLength.remove(selectLength.length - 1);
+                    // }
+                    $(keys).each(function(i){
+                        $("#selectValue1").append("<option value='" + keys[i] + "'>" + response[keys[i]] + "</option>");
+                    })
+                }
+            });
+        }
+
+        function changeACode(){
+            var mainCode = document.querySelector('input[name=radioData]:checked').value;
+            var codeA = $("#selectValue1").val();
+
+            if (mainCode == 1) {
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>본인 자동차 A</font></option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 2) {
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>본인 자동차 A</font></option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 3) {
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>사람</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 4) {
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>오토바이</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 5) {
+				$("#selectValue2").find("option").remove().end().append("<option value=''>사고 장소(또는 형태) 특징</option>");
+				$("#selectValue3").find("option").remove().end().append("<option value=''>자전거</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			}
+
+            $.ajax({
+                type: "POST",
+                url: "/test2",
+                data: {
+                    mainCodeK : mainCode,
+                    codeAK : codeA
+                },
+                success: function(response) {
+                    const keys = Object.keys(response);
+                    console.log(response)
+                    $(keys).each(function(i){
+                        $("#selectValue2").append("<option value='" + keys[i] + "'>" + response[keys[i]] + "</option>");
+                    })
+                }
+            });
+        }
+
+        function changeBCode(){
+            var mainCode = document.querySelector('input[name=radioData]:checked').value;
+            var codeA = $("#selectValue1").val();
+            var codeB = $('#selectValue2').val();
+
+            if (mainCode == 1) {
+				$("#selectValue3").find("option").remove().end().append("<option value=''>본인 자동차 A</font></option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 2) {
+				$("#selectValue3").find("option").remove().end().append("<option value=''>본인 자동차 A</font></option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 3) {
+				$("#selectValue3").find("option").remove().end().append("<option value=''>사람</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 4) {
+				$("#selectValue3").find("option").remove().end().append("<option value=''>오토바이</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 5) {
+				$("#selectValue3").find("option").remove().end().append("<option value=''>자전거</option>");
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			}
+
+            $.ajax({
+                type: "POST",
+                url: "/test3",
+                data: {
+                    mainCodeK : mainCode,
+                    codeAK : codeA,
+                    codeBK : codeB
+                },
+                success: function(response) {
+                    const keys = Object.keys(response);
+                    console.log(response)
+                    $(keys).each(function(i){
+                        $("#selectValue3").append("<option value='" + keys[i] + "'>" + response[keys[i]] + "</option>");
+                    })
+                }
+            });
+        }
+
+        function changeCCode(){
+            var mainCode = document.querySelector('input[name=radioData]:checked').value;
+            var codeA = $("#selectValue1").val();
+            var codeB = $('#selectValue2').val();
+            var codeC = $('#selectValue3').val();
+
+            if (mainCode == 1) {
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 2) {
+				$("#selectValue4").find("option").remove().end().append("<option value=''>상대방 자동차 B</font></option>");
+			} else if (mainCode == 3) {
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 4) {
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			} else if (mainCode == 5) {
+				$("#selectValue4").find("option").remove().end().append("<option value=''>자동차</option>");
+			}
+
+            $.ajax({
+                type: "POST",
+                url: "/test4",
+                data: {
+                    mainCodeK : mainCode,
+                    codeAK : codeA,
+                    codeBK : codeB,
+                    codeCK : codeC,
+                },
+                success: function(response) {
+                    const keys = Object.keys(response);
+                    console.log(response)
+                    $(keys).each(function(i){
+                        $("#selectValue4").append("<option value='" + keys[i] + "'>" + response[keys[i]] + "</option>");
+                    })
+                }
+            });
+        }
+
+        function getRate(){
+            var mainCode = document.querySelector('input[name=radioData]:checked').value;
+            var codeA = $("#selectValue1").val();
+            var codeB = $('#selectValue2').val();
+            var codeC = $('#selectValue3').val();
+            var codeD = $('#selectValue4').val();
+            $.ajax({
+                type: "POST",
+                url: "/test5",
+                data: {
+                    mainCodeK : mainCode,
+                    codeAK : codeA,
+                    codeBK : codeB,
+                    codeCK : codeC,
+                    codeDK : codeD
+                },
+                success: function(response) {
+                    const keys = Object.keys(response);
+                    var myRate = response.split(',')[0]
+                    var yourRate = 100 - parseInt(myRate)
+                    console.log(response)
+                    $("#myRate").find("div").remove().end().append("<div>" + myRate + "</div>");
+                    $("#yourRate").find("div").remove().end().append("<div>" + yourRate + "</div>");
+
+                    
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <input type="radio" name="radioData" value="1" onclick="javascript:changeMainCode();" checked="checked" style="margin: 0 5px 0 0;">
+    <label>차 대 차</label>
+    <input type="radio" name="radioData" value="2" onclick="javascript:changeMainCode();">
+    <label>고속도로</label>
+    <input type="radio" name="radioData" value="3" onclick="javascript:changeMainCode();">
+    <label>차 대 사람</label>
+    <input type="radio" name="radioData" value="4" onclick="javascript:changeMainCode();">
+    <label>차 대 이륜차</label>
+    <input type="radio" name="radioData" value="5" onclick="javascript:changeMainCode();">
+    <label>차 대 자전거</label>
+    
+    <div id="selectBox1">① 사고 장소(차도유형)는 어디였나요?</div>
+        <select id="selectValue1" type="text" onchange="javascript:changeACode();">
+            <option value="">사고 장소(차도 유형)</option>
+        </select>
+
+    <div id="selectBox2">② 사고 장소(또는 형태)의 특징은 무엇인가요?</div>
+        <select id="selectValue2" type="text" onchange="javascript:changeBCode();">								
+            <option value="">사고 장소(또는 형태) 특징</option>
+        </select>
+    
+    <div id="selectBox3">③ <font style="color:#EA6816;"><strong>본인의 자동차</strong></font>는 어떻게 진행하였나요?</div>
+        <select id="selectValue3" type="text" onchange="javascript:changeCCode();">								
+            <option value="">본인(또는 상대방) 자동차 A</option></select>
+
+    <div id="selectBox4">④ <font style="color:#ECE865;"><strong>상대방의 자동차</strong></font>는 어떻게 진행하였나요?</div>
+        <select id="selectValue4" type="text">							
+            <option value="">상대방(또는 본인) 자동차 B</option></select>
+
+    <input id="select_select_search" type="button" onclick="javascript:getRate();" value="검색">
+    
+    <div id="showRate">
+        <div id="myRate"><font style='color:#EA6816;'><strong>나: </strong></font></div>
+        <div></div>
+        <div id="yourRate"><font style='color:#ECE865;'><strong>상대방: </strong></font></div>
+        <div></div>
+    </div>
+
+
+</body>
+</html>
