@@ -104,7 +104,7 @@ def show_repairs(request):
     input_lon = float(request.GET.get('input_lon'))
 
     # 몽고db 연결
-    client = MONGODB_CONFIG['url']
+    client = MongoClient(MONGODB_CONFIG['url'])
     db = client['test']
 
     # 좌표값에서 반경 5km 이내에 있는 데이터 검색 쿼리
