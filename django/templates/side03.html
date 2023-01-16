@@ -7,6 +7,10 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>정비소 검색</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css"/>
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
@@ -51,7 +55,45 @@
             border-radius: 5px;
             cursor: pointer;
             }
+        .selectbox{
+            width:280px;
+            height: 50px;
+            border-radius: 5px 5px 5px 5px;
+            border-width: 3px;
+            border-color: #14279B;
+            font-size: 18px;
+            }
+        .searchbox{
+            width:550px;
+            height: 60px;
+            border-width: 5px;
+            margin-top:10px;
+            font-size: 25px;
+
+            }
+        .div{
+            width:600px;
+            margin:auto;
+            }
+        .send_btn{
+            width: 55px;
+            height: 60px;
+            position: absolute;
+            background: #14279B;
+            broder: none;
+            font-weight: bold; color: white; font-size: 20px;
+            margin-top:10px;
+            }
+        .searchbox:focus {
+            outline : none ;
+        .table {
+             padding: 10px;
+             border-bottom: 1px solid #CD5C5C;
+        }
         </style>
+
+
+
     </head>
     <body>
         <!-- Navigation-->
@@ -87,7 +129,61 @@
             </div>
         </header>
         <!-- Section-->
-내용
+        <form name="search_form" style="width:900px;height:200px;margin:auto;margin-top:70px;text-align:center;">
+            <span>
+                <button onclick="reset()" class="btn-reset" title="검색조건 초기화" style="background:white;border:none;margin-left:45px">
+                    <img src="{% static 'static03/images/reset-button.png' %}" style="width:25px;height:25px;margin:10px;">
+                </button>
+            </span>
+            <span>
+                <select id="s_type" class="selectbox">
+                    <option value="">정비업체분류</option>
+                    <option value="1">1급</option>
+                    <option value="2">2급</option>
+                    <option value="3">3급</option>
+                    <option value="4">4급</option>
+                </select>
+            </span>
+            <span>
+                <select id="running" class="selectbox" >
+                    <option value="">영업상태</option>
+                    <option value="1">영업</option>
+                    <option value="2">휴업</option>
+                    <option value="3">폐업</option>
+                </select>
+            </span>
+            <div class="div">
+                <input name="words" class="searchbox" style="border:4px solid #14279B">
+                <button class = "send_btn" type="button" style="border: none">검색&nbsp</button>
+            </div>
+        </form>
+
+        <div>
+            <p class="result_cnt" style="width:900px;text-align:right;margin:auto;margin-bottom:10px"></p>
+            <section class='result' style="width:900px;height:700px;margin:auto;display:none">
+                <table class='table' id="data-container">
+                    <col width="50">
+                    <col width="200">
+                    <col width="350">
+                    <col width="180">
+                    <col width="130">
+                    <thead style="text-align:center;">
+                        <tr>
+                            <th>번호</th>
+                            <th>정비업체명</th>
+                            <th>주소</th>
+                            <th>영업시간</th>
+                            <th>전화번호</th>
+                        </tr>
+                    </thead>
+
+                </table>
+                <br>
+                <div id="pagination" style="width:900px;margin:auto;text-align:center;padding:auto"></div>
+            </section>
+        </div>
+
+
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2022</p></div>
@@ -110,5 +206,75 @@
                     }
             </script>
         {%endif%}
+
+
+        <script>
+            $(".send_btn").click(function() {           // 검색버튼 클릭시 실행
+                $(".result").css("display", "block");   // 검색 목록이 보인다.
+                let container = $('#pagination');
+                container.pagination({                  // pagination 생성
+                    dataSource: function(done){         // pagination 할 데이터 -> ajax로 받아옴
+                        var words = document.querySelector('input[name = "words"]').value;
+                        var s_type = document.getElementById("s_type").value;
+                        var running = document.getElementById("running").value;
+                        console.log(words);
+                        console.log(s_type);
+                        console.log(running);
+                        $.ajax({
+                            type: 'GET',
+                            url: 'elasticsearch',
+                            data:{
+                                'words': words,
+                                's_type': s_type,
+                                'running': running
+                            },
+                            success: function(response){
+                                console.log(response);
+                                $(".result_cnt").text("검색결과 총 : " + response['list'].length + "개")
+                                done(response['list']);
+                            }
+                        })
+                    },
+                    callback: function (data, pagination) {
+
+                        $("tbody").remove();
+                        var dataHtml = document.createElement("tbody")
+
+                        $.each(data, function (index, item) {
+
+
+                                var tr = document.createElement("tr");
+                                var id = document.createElement("td");
+                                var name = document.createElement("td");
+                                var address = document.createElement("td");
+                                var time = document.createElement("td");
+                                var phone_number = document.createElement("td");
+
+                                id.appendChild(document.createTextNode(item.id));
+                                name.appendChild(document.createTextNode(item.s_name));
+                                address.appendChild(document.createTextNode(item.address));
+                                time.appendChild(document.createTextNode(item.time));
+                                phone_number.appendChild(document.createTextNode(item.phone_number));
+
+                                tr.appendChild(id);
+                                tr.appendChild(name);
+                                tr.appendChild(address);
+                                tr.appendChild(time);
+                                tr.appendChild(phone_number);
+
+                                dataHtml.append(tr);
+
+                        });
+
+                        $("#data-container").append(dataHtml);
+                    }
+                })
+            })
+
+            function reset(){
+                location.reload();
+            }
+
+        </script>
     </body>
 </html>
