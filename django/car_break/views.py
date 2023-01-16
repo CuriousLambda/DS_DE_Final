@@ -6,6 +6,11 @@ from .models import User, Image
 import json
 import csv
 from django.http import HttpResponse, JsonResponse
+from pymongo import MongoClient
+from config import *
+from elasticsearch import Elasticsearch
+from django.core.paginator import Paginator
+
 
 def logging(logging_text):
     with open('./log_test.log', 'a') as f:
@@ -102,8 +107,63 @@ def side01(request):
 def side02(request):
     return render(request, 'side02.html')
 
+def show_repairs(request):
+    # 좌표값 get
+    input_lat = float(request.GET.get('input_lat'))
+    input_lon = float(request.GET.get('input_lon'))
+
+    # 몽고db 연결
+    client = MongoClient(MONGODB_CONFIG['url'])
+    db = client['test']
+
+    # 좌표값에서 반경 5km 이내에 있는 데이터 검색 쿼리
+    query = {'location': {'$geoWithin': {'$centerSphere': [[input_lon, input_lat], 5 / 6378.1]}}}
+
+    # 휴점, 폐점 데이터를 제외하고 json 형식으로 변환해서 리스트에 삽입
+    repair_list = list()
+    for doc in db.repair.find(query):
+        repair_dict = dict()
+        repair_dict['자동차정비업체명'] = doc['s_name']
+        repair_dict['자동차정비업체종류'] = doc['s_type']
+        repair_dict['주소'] = doc['address']
+        repair_dict['좌표'] = doc['location']['coordinates']
+        repair_dict['영업상태'] = doc['running']
+        repair_dict['운영시작시각'] = doc['open_time']
+        repair_dict['운영종료시각'] = doc['close_time']
+        repair_dict['전화번호'] = doc['phone_number']
+        if repair_dict['영업상태'] == 1:
+            repair_list.append(repair_dict)
+
+    return JsonResponse({'list': repair_list})
+
 def side03(request):
     return render(request, 'side03.html')
+
+def elasticsearch(request):
+    # 검색어, 영업상태, 정비소구분 get
+    words = request.GET.get('words')
+    s_type = request.GET.get('s_type')
+    running = request.GET.get('running')
+
+    # elasticsearch 연결
+    end_point = ['http://10.10.223.60:9200']
+    es = Elasticsearch(hosts=end_point)
+
+    # 검색할 index
+    index_name = 'repairs'
+
+    # 검색 쿼리
+    res = es.search(index=index_name,
+                    query={
+                        "query_string": {
+                            "query": "(s_type: *" + s_type + ") AND (running: *" + running + ") AND (s_name: *" + words + "* OR address:*" + words + "*)"}}, size=50000)
+    result_list = [el['_source'] for el in res['hits']['hits']]
+
+    for i in range(len(result_list)):
+        result_list[i]['id'] = i + 1
+        result_list[i]["time"] = result_list[i]["open_time"] + " - " + result_list[i]["close_time"]
+
+    return JsonResponse({"list": result_list})
 
 def admin(request):
     return render(request, 'admin.html', {'list':User.objects.all()})

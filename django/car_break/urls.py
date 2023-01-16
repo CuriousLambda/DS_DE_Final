@@ -30,7 +30,9 @@ urlpatterns = [
     path('main/', views.main, name='main'),
     path('side01/', views.side01, name='side01'),
     path('side02/', views.side02, name='side02'),
-    path('side03/', views.side02, name='side03'),
+    path('side02/show_repairs', views.show_repairs, name='show_repairs'),
+    path('side03/', views.side03, name='side03'),
+    path('side03/elasticsearch', views.elasticsearch, name ='elasticsearch'),
     path('admin01/', views.admin, name='admin01'),
     path('main01/', views.main01, name='main01'),
     path('upload/', views.upload, name='upload'),
@@ -44,7 +46,7 @@ urlpatterns = [
     path('codeB', views.codeB, name="codeB"),
     path('codeC', views.codeC, name='codeC'),
     path('codeD', views.codeD, name='codeD'),
-    path('rate', views.rate, name='rate')
+    path('rate', views.rate, name='rate'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
