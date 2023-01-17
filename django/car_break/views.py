@@ -146,11 +146,18 @@ def elasticsearch(request):
     running = request.GET.get('running')
 
     # elasticsearch 연결
-    end_point = ['http://10.10.223.60:9200']
+    end_point = ELASTIC_CONFIG['url']
+    print(end_point)
     es = Elasticsearch(hosts=end_point)
 
     # 검색할 index
     index_name = 'repairs'
+
+    # 검색 결과 수 제한 수정
+    es.indices.put_settings(index="repairs",
+                            body={"index": {
+                                "max_result_window": 50000
+                            }})
 
     # 검색 쿼리
     res = es.search(index=index_name,
