@@ -109,6 +109,14 @@
             margin-left: 25%;
             }
 
+        select{
+            width: 200px;
+            height: 32px;
+            font-size: 15px;
+            border: 1px solid black;
+            border-radius: 15px;
+            }
+
         </style>
     </head>
     <body>
@@ -172,16 +180,24 @@
                         <div class="image-show" id="image-show"></div>
                     </div>
                     <br>
-                    <div>
+                    <div style="text-align:center;">
+                        <select name="car_name">
+                            <option value="올뉴모닝">차량모델선택</option>
+                            {%for data in car_name_list%}
+                                <option>{{data}}</option>
+                            {%endfor%}
+                        </select>
+                        <br><br>
                         <div class="buttonContainer" style="margin:auto;">
                             <button class="submitButton" type="submit" form="submit">수리견적 확인하기</button>
                         </div>
+                    </div>
                 </form>
             </div><br>
             {%if status == 'ok'%}
                 <div class="result">
                     <h2>수리견적 내용</h2>
-                    <h3>수리예상금액 : 000,000,000원</h3>
+                    <h3>수리예상금액 :{{result}}원</h3>
                     <p>*실제수리비용과 다를 수 있습니다. 정확한 수리비용은 정비소에 문의해주세요.</p>
                 </div>
             {%endif%}

@@ -179,101 +179,15 @@ def admin(request):
     return render(request, 'admin.html', {'list':User.objects.all()})
 
 def main01(request):
-    # 1
-    class Unet(nn.Module):
-        def __init__(self, num_classes, encoder, pre_weight):
-            super().__init__()
-            self.model = smp.Unet(classes=num_classes,
-                                  encoder_name=encoder,
-                                  encoder_weights=pre_weight,
-                                  in_channels=3)
-
-        def forward(self, x):
-            y = self.model(x)
-            encoder_weights = "imagenet"
-            return y
-
-    # 2
-    labels = ['Breakage_3', 'Crushed_2', 'Scratch_0', 'Seperated_1']
-    models = []
-
-    n_classes = 2
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-
-    for label in labels:
-        model_path = f'./test_model/models/[DAMAGE][{label}]Unet.pt'
-
-        model = Unet(encoder='resnet34', pre_weight='imagenet', num_classes=n_classes).to(device)
-        model.model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
-        model.eval()
-
-        models.append(model)
-
-    # 3
-    # 테스트 이미지 경로
-    path_test = './media/'
-    test_img = Image.objects.all().last()
-    test_img = str(test_img)
-
-    # 4
-    ## 테스트 이미지에 id와 car_name 값 입력
-    max_id = 133
-    test_car_name = ['']
-    repair_cost = {
-        'Breakage_3': [],
-        'Crushed_2': [],
-        'Scratch_0': [],
-        'Seperated_1': [],
-        'id': [],
-        'car_name': ['올뉴모닝'],
-    }
-
-    repair_cost['id'].append(max_id)
-
-    # 5
-    for img_list in range(1):
-        img = cv2.imread(path_test + test_img)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = cv2.resize(img, (256, 256))
-
-        img_input = img / 255
-        img_input = img_input.transpose([2, 0, 1])
-        img_input = torch.tensor(img_input).float().to(device)
-        img_input = img_input.unsqueeze(0)
-
-        outputs = []
-        for i, model in enumerate(models):
-            output = model(img_input)
-
-            img_output = torch.argmax(output, dim=1).detach().cpu().numpy()
-            img_output = img_output.transpose([1, 2, 0])
-
-            outputs.append(img_output)
-
-        for i, label in enumerate(labels):
-            repair_cost[label].append(outputs[i].sum())
-
-    # 6
-    model_path = './test_model/model/test_XGB.model'
-    new_model = joblib.load(model_path)
-
-    # 7
-    df_rp = pd.DataFrame(repair_cost)
-
-    # 8
-    label_info = pd.read_csv('./test_model/model/label_data.csv')
-    for i in range(len(label_info['car_name'])):
-        if df_rp['car_name'][0] == label_info['car_name'][i]:
-            df_rp = df_rp.replace(label_info['car_name'][i], label_info['labeled'][i])
-
-    result = new_model.predict(df_rp.iloc[0].values.reshape(1, 6))
-    result = format(round(result[0]), ',')
-    res = {'result' : result}
-    return render(request, 'main01.html', res)
+    return render(request, 'main01.html')
 
 def upload(request):
     res_data = {'status' : ''}
+    car_names = pd.read_csv('./test_model/model/label_data.csv')
+    car_names = pd.DataFrame(car_names)
+    car_names = car_names['car_name']
+    car_names = car_names.values.tolist()
+    res_data['car_name_list'] = car_names
     if request.method == 'POST' :
         file = request.FILES.get('chooseFile')
         if file:
@@ -320,13 +234,14 @@ def upload(request):
             ## 테스트 이미지에 id와 car_name 값 입력
             max_id = 133
             test_car_name = ['']
+            car_name = request.POST['car_name']
             repair_cost = {
                 'Breakage_3': [],
                 'Crushed_2': [],
                 'Scratch_0': [],
                 'Seperated_1': [],
                 'id': [],
-                'car_name': ['올뉴모닝'],
+                'car_name': [car_name],
             }
 
             repair_cost['id'].append(max_id)
@@ -372,6 +287,7 @@ def upload(request):
 
             res_data['status'] = 'ok'
             res_data['result'] = result
+            res_data['car_name'] = repair_cost['car_name']
         return render(request, 'main01.html', res_data)
 
 
