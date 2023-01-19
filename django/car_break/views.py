@@ -159,6 +159,14 @@ def elasticsearch(request):
     s_type = request.GET.get('s_type')
     running = request.GET.get('running')
 
+    # 입력값이 없을 때
+    if words == '':
+        words = '*'
+    if s_type == '':
+        s_type = '*'
+    if running == '':
+        running = '*'
+
     # elasticsearch 연결
     end_point = ELASTIC_CONFIG['url']
     print(end_point)
@@ -177,7 +185,11 @@ def elasticsearch(request):
     res = es.search(index=index_name,
                     query={
                         "query_string": {
-                            "query": "(s_type: *" + s_type + ") AND (running: *" + running + ") AND (s_name: *" + words + "* OR address:*" + words + "*)"}}, size=50000)
+                            "query":
+                                "(s_type: " + s_type + ") AND (running: " + running + ") AND (s_name: " + words + " OR address:" + words + ")"
+                        }
+                    },
+                    size=50000)
     result_list = [el['_source'] for el in res['hits']['hits']]
 
     for i in range(len(result_list)):
