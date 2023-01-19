@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views
+from ....final_practice import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -37,6 +37,14 @@ urlpatterns = [
     path('visitor/', views.visitor, name='visitor'),
     path('usage/', views.usage, name='usage'),
     path('user/', views.user, name='user'),
+    ##################
+    #     과실비율     #
+    ##################
+    path('codeA', views.codeA, name="codeA"),
+    path('codeB', views.codeB, name="codeB"),
+    path('codeC', views.codeC, name='codeC'),
+    path('codeD', views.codeD, name='codeD'),
+    path('rate', views.rate, name='rate'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

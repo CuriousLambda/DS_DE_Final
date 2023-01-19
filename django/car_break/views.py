@@ -3,8 +3,20 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 import re
 from .models import User, Image
+import json
+import csv
+from django.http import HttpResponse, JsonResponse
+
+def logging(logging_text):
+    with open('./log_test.log', 'a') as f:
+        f.write(logging_text)
+        f.write('\n')
 
 def index(request):
+    print(request.body.decode('utf-8'))
+    print(request.headers['content-encoding'])
+    logging_text = 'index'
+    logging(logging_text)
     return render(request, 'index.html')
 
 def login(request):
@@ -84,12 +96,17 @@ def signUp(request):
         return render(request, 'signUp.html', res_data)
 
 def main(request):
+    print(request.header.decode('utf-8'))
     return render(request, 'main.html')
 
 def side01(request):
+    # request.user.username
+    res = {'user_name' : request.user.username}
+    print(res)
     return render(request, 'side01.html')
 
 def side02(request):
+    print(request.body.decode('utf-8'))
     return render(request, 'side02.html')
 
 def side03(request):
@@ -120,3 +137,256 @@ def usage(request):
 
 def user(request):
     return render(request, 'user.html', {'list' : User.objects.all()})
+
+#####################################################################
+#       과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율       #
+#####################################################################
+
+def codeA(request):
+    main_code = request.body.decode('utf-8')[-1]
+    print("################\n", main_code, type(main_code), len(main_code), "\n##############")
+    # res_dict = {}
+
+    def make_resdict1(case):
+        res_dict = {}
+        jsonfile = '/Users/admin/Desktop/final/final_practice/static/'+ case + '_code.json'
+        csvfile = '/Users/admin/Desktop/final/final_practice/static/' + case + '_text.csv'
+        with open(jsonfile, 'r') as jf:
+            jsondata = json.load(jf)
+            keys = jsondata.keys()
+            with open(csvfile, 'r') as cf:
+                reader = csv.reader(cf)
+                for row in reader:
+                    if row[0] in keys:
+                        res_dict[row[0]] = row[1]
+                        continue
+        return res_dict
+            
+
+    if main_code == '1':
+        case = 'cvc'
+        res_dict = make_resdict1(case)
+        return JsonResponse(res_dict)
+      
+    elif main_code == '2':
+        case = 'highway'
+        res_dict = make_resdict1(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '3':
+        case = 'cvm'
+        res_dict = make_resdict1(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '4':
+        case = 'cva'
+        res_dict = make_resdict1(case)
+        return JsonResponse(res_dict)
+
+    else:
+        case = 'cvb'
+        res_dict = make_resdict1(case)
+        return JsonResponse(res_dict)
+
+
+def codeB(request):
+    data = request.body.decode('utf-8')
+    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
+    main_code = data.split('&')[0][-1]
+    code_A = data.split('&')[1][7:]
+    print(main_code)
+    print(code_A)
+    # res_dict = {}
+
+    def make_resdict2(case):
+        res_dict = {}
+        jsonfile = '/Users/admin/Desktop/final/final_practice/static/'+ case + '_code.json'
+        csvfile = '/Users/admin/Desktop/final/final_practice/static/' + case + '_text.csv'
+        with open(jsonfile) as jf:
+            jsondata = json.load(jf)
+            for i in jsondata[code_A]:
+                code_B_list = i.keys()
+            with open(csvfile, 'r') as cf:
+                reader = csv.reader(cf)
+                for row in reader:
+                    if row[0] in code_B_list:
+                        res_dict[row[0]] = row[1]
+                        continue
+        return res_dict
+
+    if main_code == '1':
+        case = 'cvc'
+        res_dict = make_resdict2(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '2':
+        case = 'highway'
+        res_dict = make_resdict2(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '3':
+        case = 'cvm'
+        res_dict = make_resdict2(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '4':
+        case = 'cva'
+        res_dict = make_resdict2(case)
+        return JsonResponse(res_dict)
+
+    else:
+        case = 'cvb'
+        res_dict = make_resdict2(case)
+        return JsonResponse(res_dict)
+    
+def codeC(request):
+    data = request.body.decode('utf-8')
+    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
+    main_code = data.split('&')[0][-1]
+    code_A = data.split('&')[1][7:]
+    code_B = data.split('&')[2][7:]
+    print(main_code)
+    print(code_A)
+    print(code_B)
+    # res_dict = {}
+
+    def make_resdict3(case):
+        res_dict = {}
+        jsonfile = '/Users/admin/Desktop/final/final_practice/static/'+ case + '_code.json'
+        csvfile = '/Users/admin/Desktop/final/final_practice/static/' + case + '_text.csv'
+        with open(jsonfile) as jf:
+            jsondata = json.load(jf)
+            for i in jsondata[code_A][0][code_B]:
+                code_C_list = i.keys()
+            with open(csvfile, 'r') as cf:
+                reader = csv.reader(cf)
+                for row in reader:
+                    if row[0] in code_C_list:
+                        res_dict[row[0]] = row[1]
+                        continue
+        return res_dict
+
+    if main_code == '1':
+        case = 'cvc'
+        res_dict = make_resdict3(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '2':
+        case = 'highway'
+        res_dict = make_resdict3(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '3':
+        case = 'cvm'
+        res_dict = make_resdict3(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '4':
+        case = 'cva'
+        res_dict = make_resdict3(case)
+        return JsonResponse(res_dict)
+
+    else:
+        case = 'cvb'
+        res_dict = make_resdict3(case)
+        return JsonResponse(res_dict)
+
+def codeD(request):
+    data = request.body.decode('utf-8')
+    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
+    main_code = data.split('&')[0][-1]
+    code_A = data.split('&')[1][7:]
+    code_B = data.split('&')[2][7:]
+    code_C = data.split('&')[3][7:]
+    print(main_code)
+    print(code_A)
+    print(code_B)
+    print(code_C)
+    # res_dict = {}
+
+    def make_resdict4(case):
+        res_dict = {}
+        jsonfile = '/Users/admin/Desktop/final/final_practice/static/'+ case + '_code.json'
+        csvfile = '/Users/admin/Desktop/final/final_practice/static/' + case + '_text.csv'
+        with open(jsonfile) as jf:
+            jsondata = json.load(jf)
+            for i in jsondata[code_A][0][code_B][0][code_C]:
+                code_D_list = i.keys()
+                with open(csvfile, 'r') as cf:
+                    reader = csv.reader(cf)
+                    for row in reader:
+                        if row[0] in code_D_list:
+                            res_dict[row[0]] = row[1]
+                            continue
+        return res_dict
+
+    if main_code == '1':
+        case = 'cvc'
+        res_dict = make_resdict4(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '2':
+        case = 'highway'
+        res_dict = make_resdict4(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '3':
+        case = 'cvm'
+        res_dict = make_resdict4(case)
+        return JsonResponse(res_dict)
+
+    elif main_code == '4':
+        case = 'cva'
+        res_dict = make_resdict4(case)
+        return JsonResponse(res_dict)
+
+    else:
+        case = 'cvb'
+        res_dict = make_resdict4(case)
+        return JsonResponse(res_dict)
+
+def rate(request):
+    data = request.body.decode('utf-8')
+    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
+    main_code = data.split('&')[0][-1]
+    code_A = data.split('&')[1][7:]
+    code_B = data.split('&')[2][7:]
+    code_C = data.split('&')[3][7:]
+    code_D = data.split('&')[4][7:]
+    print(main_code)
+    print(code_A)
+    print(code_B)
+    print(code_C)
+    print(code_D)
+
+    def make_rate(case):
+        jsonfile = '/Users/admin/Desktop/final/final_practice/static/'+ case + '_code.json'
+        with open(jsonfile) as jf:
+            jsondata = json.load(jf)
+            rate_list = jsondata[code_A][0][code_B][0][code_C][0][code_D]
+        return rate_list[0]
+
+    if main_code == '1':
+        case = 'cvc'
+        rate = make_rate(case)
+        return HttpResponse(rate)
+
+    elif main_code == '2':
+        case = 'highway'
+        rate = make_rate(case)
+        return HttpResponse(rate)
+
+    elif main_code == '3':
+        case = 'cvm'
+        rate = make_rate(case)
+        return HttpResponse(rate)
+
+    elif main_code == '4':
+        case = 'cva'
+        rate = make_rate(case)
+        return HttpResponse(rate)
+
+    else:
+        case = 'cvb'
+        rate = make_rate(case)
+        return HttpResponse(rate)
