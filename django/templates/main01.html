@@ -103,12 +103,6 @@
             border: 0;
             }
 
-        .result{
-            text-align: center;
-            width: 50%;
-            margin-left: 25%;
-            }
-
         select{
             width: 200px;
             height: 32px;
@@ -117,6 +111,49 @@
             border-radius: 15px;
             }
 
+        .result_overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+        }
+
+        .result_window {
+            background: white;
+            backdrop-filter: blur(13.5px);
+            -webkit-backdrop-filter: blur(13.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 600px;
+            height: 300px;
+            position: relative;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .loading {
+            width:100%;
+            height:100%;
+            position:fixed;
+            left:0px;
+            top:0px;
+            z-index:1000;
+            text-align: center;
+            display: none;
+        }
+
+        .loadingImg {
+            position: absolute;
+            top: 40%;
+        }
         </style>
     </head>
     <body>
@@ -195,12 +232,22 @@
                 </form>
             </div><br>
             {%if status == 'ok'%}
-                <div class="result">
-                    <h2>수리견적 내용</h2>
-                    <h3>수리예상금액 :{{result}}원</h3>
-                    <p>*실제수리비용과 다를 수 있습니다. 정확한 수리비용은 정비소에 문의해주세요.</p>
+                <div class="result_overlay">
+                        <div class="result_window">
+                            <br><br>
+                            <h2>수리예상금액 : {{result}}원</h2>
+                            <h3>차량모델 : {{car_name}}</h3>
+                            <br><br>
+                            <p>*실제수리비용과 다를 수 있습니다. 정확한 수리비용은 정비소에 문의해주세요.</p>
+                            <div class="buttonContainer" style="margin:auto;">
+                                <button class="submitButton" onclick="closeResult();">확인</button>
+                            </div>
+                        </div>
                 </div>
             {%endif%}
+            <div class="loading" id="loading">
+                <img class="loadingImg" src="https://t1.daumcdn.net/cfile/tistory/233F6D505786DA870A" width="50px">
+            </div>
         </div>
         <br>
 
@@ -247,6 +294,20 @@
                 var container = document.getElementById('image-show');
                 container.appendChild(newImage);
             };
+
+        <script>
+            function loading(){
+                var loading = document.getElementById("loading");
+
+                loading.style.display = "block";
+                document.body.style.overflowY = "hidden";
+
+            }
+
+            function closeResult(){
+                window.location.href="{%url 'main01'%}";
+            }
+        </script>
 
         </script>
         {%if request.user.is_superuser%}

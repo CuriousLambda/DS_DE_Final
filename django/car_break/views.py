@@ -108,7 +108,7 @@ def signUp(request):
         return render(request, 'signUp.html', res_data)
 
 def main(request):
-    print(request.header.decode('utf-8'))
+    # print(request.header.decode('utf-8'))
     return render(request, 'main.html')
 
 def side01(request):
@@ -202,16 +202,13 @@ def admin(request):
     return render(request, 'admin.html', {'list':User.objects.all()})
 
 def main01(request):
-    return render(request, 'main01.html')
-
-def upload(request):
-    res_data = {'status' : ''}
-    car_names = pd.read_csv('./test_model/model/label_data.csv')
-    car_names = pd.DataFrame(car_names)
-    car_names = car_names['car_name']
-    car_names = car_names.values.tolist()
-    res_data['car_name_list'] = car_names
-    if request.method == 'POST' :
+    res_data = dict()
+    car_names_csv = pd.read_csv('./test_model/model/label_data.csv')
+    car_names_df = pd.DataFrame(car_names_csv)
+    car_names = car_names_df['car_name']
+    car_names_list = car_names.values.tolist()
+    res_data['car_name_list'] = car_names_list
+    if request.method == 'POST':
         file = request.FILES.get('chooseFile')
         if file:
             image = Image(file=file)
@@ -311,9 +308,8 @@ def upload(request):
             res_data['status'] = 'ok'
             res_data['result'] = result
             res_data['car_name'] = repair_cost['car_name']
+
         return render(request, 'main01.html', res_data)
-
-
     return render(request, 'main01.html', res_data)
 
 def visitor(request):

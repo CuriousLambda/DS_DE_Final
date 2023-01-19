@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from ....final_practice import views
+# from ....final_practice import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
 
 urlpatterns = [
@@ -35,7 +36,6 @@ urlpatterns = [
     path('side03/elasticsearch', views.elasticsearch, name ='elasticsearch'),
     path('admin01/', views.admin, name='admin01'),
     path('main01/', views.main01, name='main01'),
-    path('upload/', views.upload, name='upload'),
     path('visitor/', views.visitor, name='visitor'),
     path('usage/', views.usage, name='usage'),
     path('user/', views.user, name='user'),
