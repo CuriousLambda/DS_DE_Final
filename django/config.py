@@ -1,9 +1,9 @@
 
 MYSQL_CONFIG = {
     'NAME': 'project03',
-    'USER': 'sjy01',
-    'PASSWORD': 'asdf1234',
-    'HOST': '13.208.82.150',
+    'USER': 'root',
+    'PASSWORD': 'asdf1234!!',
+    'HOST': '34.64.199.58',
     'PORT': '3306',
 }
 
