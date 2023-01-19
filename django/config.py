@@ -15,9 +15,6 @@ ELASTIC_CONFIG = {
     'url': 'http://13.208.82.150:9200'
 }
 
-KAKAO_MAP_KEY = {
-    'appkey': 'dd814cd8c09cb0d6fe824b8ab473ed93'
-}
 
 DJANGO_CONFIG = 'django-insecure-0cyl!o8(i=ulp7_gp&g+h85xr4x_ud&y9^#9$ws(kl6+_=5r&6'
 
