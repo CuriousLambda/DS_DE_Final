@@ -19,10 +19,16 @@ def logging(logging_text):
     with open('./log_test.log', 'a') as f:
         f.write(logging_text)
         f.write('\n')
+import json
+import csv
+from django.http import HttpResponse, JsonResponse
+
+def logging(logging_text):
+    with open('./log_test.log', 'a') as f:
+        f.write(logging_text)
+        f.write('\n')
 
 def index(request):
-    logging_text = 'index'
-    logging(logging_text)
     return render(request, 'index.html')
 
 def login(request):
@@ -102,12 +108,17 @@ def signUp(request):
         return render(request, 'signUp.html', res_data)
 
 def main(request):
+    print(request.header.decode('utf-8'))
     return render(request, 'main.html')
 
 def side01(request):
+    # request.user.username
+    res = {'user_name' : request.user.username}
+    print(res)
     return render(request, 'side01.html')
 
 def side02(request):
+    print(request.body.decode('utf-8'))
     return render(request, 'side02.html')
 
 def show_repairs(request):

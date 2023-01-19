@@ -52,6 +52,28 @@
             border-radius: 5px;
             cursor: pointer;
             }
+            #showRate{
+            /* bottom, top, left, margin 조절 필요 */
+            width: 100%; 
+            height: 50%; 
+            float: left; 
+            margin: 100px 0 0 0; 
+            border: 1px solid #dcdcdc; 
+            background-color: #ffffff; 
+            left: 0px; 
+            top: 0px; 
+            bottom: 0px;
+            position: fixed; 
+            overflow: hidden; 
+            z-index: 10;
+        }
+        #resultClose{
+            float: right; 
+            margin: 5px 2% 5px 0; 
+            padding: 0px 5px 0px 5px; 
+            border: 1px solid #666666; 
+            cursor: pointer;
+        }
         </style>
 
 <script>
@@ -284,35 +306,53 @@
     }
 
     function getRate(){
-        var mainCode = document.getElementById('selectMainCode').value;
-        var codeA = $("#selectValue1").val();
-        var codeB = $('#selectValue2').val();
-        var codeC = $('#selectValue3').val();
-        var codeD = $('#selectValue4').val();
-        $.ajax({
-            type: "POST",
-            url: "/rate",
-            data: {
-                mainCodeK : mainCode,
-                codeAK : codeA,
-                codeBK : codeB,
-                codeCK : codeC,
-                codeDK : codeD
-            },
-            success: function(response) {
-                const keys = Object.keys(response);
-                var myRate = response.split(',')[0]
-                var yourRate = 100 - parseInt(myRate)
-                console.log(response)
-                $("#myRate").find("div").remove().end().append("<div>" + myRate + "</div>");
-                $("#yourRate").find("div").remove().end().append("<div>" + yourRate + "</div>");
-
-                
+            var mainCode = document.getElementById('selectMainCode').value;
+            var codeA = $("#selectValue1").val();
+            var codeB = $('#selectValue2').val();
+            var codeC = $('#selectValue3').val();
+            var codeD = $('#selectValue4').val();
+            $.ajax({
+                type: "POST",
+                url: "/rate",
+                data: {
+                    mainCodeK : mainCode,
+                    codeAK : codeA,
+                    codeBK : codeB,
+                    codeCK : codeC,
+                    codeDK : codeD
+                },
+                success: function(response) {
+                    const keys = Object.keys(response);
+                    var myRate = response.split(',')[0]
+                    var yourRate = 100 - parseInt(myRate)
+                    var result = document.getElementById("showRate")
+                    if (result.style.display =='none'){
+                        result.style.display = 'block'
+                    }
+                    else{
+                        result.style.display = 'none'
+                    }
+                    console.log(response)
+                    $("#myRate").find("div").remove().end().append("<div>" + myRate + "</div>");
+                    $("#yourRate").find("div").remove().end().append("<div>" + yourRate + "</div>");
+                }
+            });
+        }
+        function resClose(){
+            var result = document.getElementById("showRate")
+            if (result.style.display =='none'){
+                result.style.display = 'block'
             }
-        });
-    }
+            else{
+                result.style.display = 'none'
+            }
+        }
     </script>
     </head>
+
+
+
+
 
 
 
@@ -355,7 +395,7 @@
         <div class="service">
             <p>1. 사고 상대를 선택해주세요.</p>
             <select id="selectMainCode" onchange="changeMainCode();">
-                <option selected>선택</option>
+                <option value="" selected >선택하세요</option>
                 <option value="1" >차 대 차</option>
                 <option value="2" >고속도로</option>
                 <option value="3" >차 대 사람</option>
@@ -366,7 +406,15 @@
             <div id="selectBox1">2. 사고 장소(차도유형)는 어디였나요?</div>
             <select id="selectValue1" type="text" onchange="javascript:changeACode();">
                 <option value="">사고 장소(차도 유형)</option>
+
+            <div id="selectBox1">2. 사고 장소(차도유형)는 어디였나요?</div>
+            <select id="selectValue1" type="text" onchange="javascript:changeACode();">
+                <option value="">사고 장소(차도 유형)</option>
             </select><br><br><br>
+
+            <div id="selectBox2">3. 사고 장소(또는 형태)의 특징은 무엇인가요?</div>
+            <select id="selectValue2" type="text" onchange="javascript:changeBCode();">								
+                <option value="">사고 장소(또는 형태) 특징</option>
 
             <div id="selectBox2">3. 사고 장소(또는 형태)의 특징은 무엇인가요?</div>
             <select id="selectValue2" type="text" onchange="javascript:changeBCode();">								
@@ -380,9 +428,24 @@
             <div id="selectBox4">5. 상대방(또는 본인) 자동차 B는 어떻게 진행하였나요?</div>
             <select id="selectValue4" type="text">							
                 <option value="">상대방(또는 본인) 자동차 B</option></select>
+            
+            <div id="selectBox3">4. 본인(또는 상대방) 자동차 A는 어떻게 진행하였나요?</div>
+            <select id="selectValue3" type="text" onchange="javascript:changeCCode();">								
+                <option value="">본인(또는 상대방) 자동차 A</option></select><br><br><br>
+            
+            <div id="selectBox4">5. 상대방(또는 본인) 자동차 B는 어떻게 진행하였나요?</div>
+            <select id="selectValue4" type="text">							
+                <option value="">상대방(또는 본인) 자동차 B</option></select>
             <br><br>
 
             <input id="select_select_search" type="button" onclick="javascript:getRate();" value="과실비율 확인하기">
+            <div id="showRate" style="display: none; ">
+                <div id="resultClose" onclick="javascript:resClose();">X</div>
+                <div id="myRate"><font style='color:#EA6816;'><strong>3: </strong></font></div>
+                <div></div>
+                <div id="yourRate"><font style='color:#ECE865;'><strong>4: </strong></font></div>
+                <div></div>
+            </div>
         </div><br><br><br><br><br><br>
 
         <!-- Footer-->
