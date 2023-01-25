@@ -276,7 +276,7 @@ def admin(request):
 
 def main01(request):
     res_data = dict()
-    car_names_csv = pd.read_csv('./test_model/model/label_data.csv')
+    car_names_csv = pd.read_csv('./model/model/label_data.csv')
     car_names_df = pd.DataFrame(car_names_csv)
     car_names = car_names_df['car_name']
     car_names_list = car_names.values.tolist()
@@ -309,7 +309,7 @@ def main01(request):
             device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
             for label in labels:
-                model_path = f'./test_model/models/[DAMAGE][{label}]Unet.pt'
+                model_path = f'./model/models/[DAMAGE][{label}]Unet.pt'
 
                 model = Unet(encoder='resnet34', pre_weight='imagenet', num_classes=n_classes).to(device)
                 model.model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
@@ -363,14 +363,14 @@ def main01(request):
                     repair_cost[label].append(outputs[i].sum())
 
             # 6
-            model_path = './test_model/model/test_XGB.model'
+            model_path = './model/model/XGB03.model'
             new_model = joblib.load(model_path)
 
             # 7
             df_rp = pd.DataFrame(repair_cost)
 
             # 8
-            label_info = pd.read_csv('./test_model/model/label_data.csv')
+            label_info = pd.read_csv('./model/model/label_data.csv')
             for i in range(len(label_info['car_name'])):
                 if df_rp['car_name'][0] == label_info['car_name'][i]:
                     df_rp = df_rp.replace(label_info['car_name'][i], label_info['labeled'][i])
