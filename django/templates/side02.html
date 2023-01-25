@@ -134,6 +134,34 @@
                          }
                      )
                  }
+
+                 $.ajax({
+                    type: 'GET',
+                    url: 'click_log',
+                    success: function(response){
+
+                        for (var i = 0; i < response['list'].length; i++) {
+
+                            var info = document.createElement("p") // <p> 생성
+                            info.setAttribute("id", 'new') // id 요소 추가
+                            info.setAttribute("style",
+                            "width:900px;margin:auto;padding:10px;border-radius:10px") // style 지정
+
+                            list = response['list'][i]
+                            info.innerHTML = "<b>" + list.s_name + "</b>"
+                                + "<br>" + "<font size=2>" + "자동차정비업체종류 : " + list.s_type + "급"
+                                + "<br>주소 : " + list.address
+                                + "<br>운영시작시간 : " + list.open_time
+                                + "&nbsp&nbsp&nbsp&nbsp&nbsp운영종료시간 : " + list.close_time
+                                + "<br>전화번호 : " + list.phone_number
+                                + "</fonts>" + "<hr>"
+
+                            var list = document.getElementById('list');
+                            var p = document.getElementById('new');
+                            list.insertBefore(info, p); // list의 new 앞에 추가
+                        }
+                    }
+                })
              }
 
 
@@ -209,7 +237,6 @@
                          function clickListener(marker, content) {
                             return function() {
                                 var info = document.createElement("p") // <p> 생성
-                                count = 0
                                 info.setAttribute("id", 'new') // id 요소 추가
                                 info.setAttribute("style",
                                 "width:900px;margin:auto;padding:10px;border-radius:10px") // style 지정
@@ -230,15 +257,21 @@
                                 while(list.children.length > 3) {
                                     list.removeChild(list.lastChild); //마지막 노드를 삭제
                                 }
+                                $.ajax({
+                                     url: 'marker_click',
+                                     type: 'GET',
+                                     data:{
+                                         's_name' : content.자동차정비업체명,
+                                         's_id' : content.id
+                                     },
+                                     success: function(){
+                                     }
+                                })
                             }
                          }
                      }
                  });
              }
-
-
-
-
         </script>
 
 
