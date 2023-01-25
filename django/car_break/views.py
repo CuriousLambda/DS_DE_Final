@@ -14,17 +14,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
-
-def logging(logging_text):
-    with open('./log_test.log', 'a') as f:
-        f.write(logging_text)
-        f.write('\n')
 import json
 import csv
 from django.http import HttpResponse, JsonResponse
 
+# 로그 쓰는 함수
+# id, main_function, client_ip, searched_word
+# ip는 geoip source로, lat, lon은 잠깐 보류
 def logging(logging_text):
-    with open('./log_test.log', 'a') as f:
+    with open('./django_log.log', 'a') as f:
         f.write(logging_text)
         f.write('\n')
 
@@ -108,35 +106,22 @@ def signUp(request):
         return render(request, 'signUp.html', res_data)
 
 def main(request):
-    # print(request.header.decode('utf-8'))
-    # log_csv
-    with open('./log.csv', 'a') as f:
-        f.write(request.user.username + ',main,,,')
-        f.write('\n')
+    # logging
+    # id, main_function, client_ip, searched_word
+    logging_text = request.user.username + ',' + 'main' + ',' + ','
+    logging(logging_text)
     return render(request, 'main.html')
 
 def side01(request):
-    # request.user.username
-    res = {'user_name' : request.user.username}
-    print(res)
-
-    #log_csv
-    with open('./log.csv', 'a') as f:
-        f.write(request.user.username + ',side01,,,')
-        f.write('\n')
-
     return render(request, 'side01.html')
 
 def side02(request):
-
-    #log_csv
-    with open('./log.csv', 'a') as f:
-        f.write(request.user.username + ',side02,,,')
-        f.write('\n')
-
     return render(request, 'side02.html')
 
 def show_repairs(request):
+    # logging
+    logging_text = request.user.username + ',' + 'show_near_repairshop' + ',' + ','
+    logging(logging_text)
     # 좌표값 get
     input_lat = float(request.GET.get('input_lat'))
     input_lon = float(request.GET.get('input_lon'))
@@ -171,12 +156,12 @@ def show_repairs(request):
 
 def marker_click(request):
     s_name = request.GET.get('s_name')
-    s_id = request.GET.get('s_id')
-
-    # log_csv
-    with open('./log.csv', 'a') as f:
-        f.write(request.user.username + ',,' + s_name + ',' + s_id + ',')
-        f.write('\n')
+    # s_id 어떤 데이턴지 물어봐야됨
+    # s_id = request.GET.get('s_id')
+    # logging
+    # id, main_function, client_ip, searched_word
+    logging_text = request.user.username + ',' + 'clicked_repairshop' + ',' + ',' + s_name
+    logging(logging_text)
     return HttpResponse(s_name)
 
 def click_log(request):
@@ -211,12 +196,6 @@ def click_log(request):
 
 
 def side03(request):
-
-    # log_csv
-    with open('./log.csv', 'a') as f:
-        f.write(request.user.username + ',side03,,,')
-        f.write('\n')
-
     return render(request, 'side03.html')
 
 def elasticsearch(request):
@@ -226,10 +205,10 @@ def elasticsearch(request):
     running = request.GET.get('running')
     print(words)
 
-    #log_csv
-    with open('./log.csv', 'a') as f:
-        f.write(request.user.username + ',,,,' + words)
-        f.write('\n')
+    # logging
+    # id, main_function, client_ip, searched_word
+    logging_text = request.user.username + ',' + 'search_repairshop' + ',' + ',' + words
+    logging(logging_text)
 
     # 입력값이 없을 때
     if words == '':
@@ -275,6 +254,11 @@ def admin(request):
     return render(request, 'admin.html', {'list':User.objects.all()})
 
 def main01(request):
+    # logging
+    # id, main_function, client_ip, searched_word
+    logging_text = request.user.username + ',' + 'show_cost' + ',' + ','
+    logging(logging_text)
+
     res_data = dict()
     car_names_csv = pd.read_csv('./model/model/label_data.csv')
     car_names_df = pd.DataFrame(car_names_csv)
@@ -400,8 +384,6 @@ def user(request):
 
 def codeA(request):
     main_code = request.body.decode('utf-8')[-1]
-    print("################\n", main_code, type(main_code), len(main_code), "\n##############")
-    # res_dict = {}
 
     def make_resdict1(case):
         res_dict = {}
@@ -447,12 +429,8 @@ def codeA(request):
 
 def codeB(request):
     data = request.body.decode('utf-8')
-    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
     main_code = data.split('&')[0][-1]
     code_A = data.split('&')[1][7:]
-    print(main_code)
-    print(code_A)
-    # res_dict = {}
 
     def make_resdict2(case):
         res_dict = {}
@@ -497,14 +475,9 @@ def codeB(request):
     
 def codeC(request):
     data = request.body.decode('utf-8')
-    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
     main_code = data.split('&')[0][-1]
     code_A = data.split('&')[1][7:]
     code_B = data.split('&')[2][7:]
-    print(main_code)
-    print(code_A)
-    print(code_B)
-    # res_dict = {}
 
     def make_resdict3(case):
         res_dict = {}
@@ -549,16 +522,10 @@ def codeC(request):
 
 def codeD(request):
     data = request.body.decode('utf-8')
-    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
     main_code = data.split('&')[0][-1]
     code_A = data.split('&')[1][7:]
     code_B = data.split('&')[2][7:]
     code_C = data.split('&')[3][7:]
-    print(main_code)
-    print(code_A)
-    print(code_B)
-    print(code_C)
-    # res_dict = {}
 
     def make_resdict4(case):
         res_dict = {}
@@ -602,18 +569,16 @@ def codeD(request):
         return JsonResponse(res_dict)
 
 def rate(request):
+    # logging
+    # id, main_function, client_ip, searched_word
+    logging_text = request.user.username + ',' + 'acc_rate' + ',' + ','
+    logging(logging_text)
     data = request.body.decode('utf-8')
-    print("@@@@@@@@@@@@@@@\n", data, type(data), len(data), "\n@@@@@@@@@@@@@")
     main_code = data.split('&')[0][-1]
     code_A = data.split('&')[1][7:]
     code_B = data.split('&')[2][7:]
     code_C = data.split('&')[3][7:]
     code_D = data.split('&')[4][7:]
-    print(main_code)
-    print(code_A)
-    print(code_B)
-    print(code_C)
-    print(code_D)
 
     def make_rate(case):
         jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
