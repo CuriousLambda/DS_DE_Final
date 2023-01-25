@@ -325,7 +325,7 @@ def main01(request):
 
             # 4
             ## 테스트 이미지에 id와 car_name 값 입력
-            max_id = 133
+            max_id = 18246
             test_car_name = ['']
             car_name = request.POST['car_name']
             repair_cost = {
