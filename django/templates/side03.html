@@ -86,9 +86,10 @@
             }
         .searchbox:focus {
             outline : none ;
+           }
         .table {
              padding: 10px;
-             border-bottom: 1px solid #CD5C5C;
+             border-bottom: 1px solid gray;
         }
         </style>
 
@@ -110,7 +111,7 @@
                         </form>
                     </ul>
                     <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="button" onclick="admin()">
+                        <button class="btn btn-outline-dark" type="submit" onclick="admin()">
                             <img src="https://cdn-icons-png.flaticon.com/512/3934/3934107.png" width="25px">
                             Admin
                         </button>
@@ -241,7 +242,6 @@
                         var dataHtml = document.createElement("tbody")
 
                         $.each(data, function (index, item) {
-
 
                                 var tr = document.createElement("tr");
                                 var id = document.createElement("td");

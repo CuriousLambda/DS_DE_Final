@@ -109,16 +109,31 @@ def signUp(request):
 
 def main(request):
     # print(request.header.decode('utf-8'))
+    # log_csv
+    with open('./log.csv', 'a') as f:
+        f.write(request.user.username + ',main,,,')
+        f.write('\n')
     return render(request, 'main.html')
 
 def side01(request):
     # request.user.username
     res = {'user_name' : request.user.username}
     print(res)
+
+    #log_csv
+    with open('./log.csv', 'a') as f:
+        f.write(request.user.username + ',side01,,,')
+        f.write('\n')
+
     return render(request, 'side01.html')
 
 def side02(request):
-    print(request.body.decode('utf-8'))
+
+    #log_csv
+    with open('./log.csv', 'a') as f:
+        f.write(request.user.username + ',side02,,,')
+        f.write('\n')
+
     return render(request, 'side02.html')
 
 def show_repairs(request):
@@ -131,12 +146,15 @@ def show_repairs(request):
     db = client['test']
 
     # 좌표값에서 반경 5km 이내에 있는 데이터 검색 쿼리
-    query = {'location': {'$geoWithin': {'$centerSphere': [[input_lon, input_lat], 5 / 6378.1]}}}
+    query = {'location':
+                 {'$geoWithin':
+                      {'$centerSphere': [[input_lon, input_lat], 5 / 6378.1]}}}
 
     # 휴점, 폐점 데이터를 제외하고 json 형식으로 변환해서 리스트에 삽입
     repair_list = list()
     for doc in db.repair.find(query):
         repair_dict = dict()
+        repair_dict['id']= doc['s_id']
         repair_dict['자동차정비업체명'] = doc['s_name']
         repair_dict['자동차정비업체종류'] = doc['s_type']
         repair_dict['주소'] = doc['address']
@@ -150,7 +168,55 @@ def show_repairs(request):
 
     return JsonResponse({'list': repair_list})
 
+
+def marker_click(request):
+    s_name = request.GET.get('s_name')
+    s_id = request.GET.get('s_id')
+
+    # log_csv
+    with open('./log.csv', 'a') as f:
+        f.write(request.user.username + ',,' + s_name + ',' + s_id + ',')
+        f.write('\n')
+    return HttpResponse(s_name)
+
+def click_log(request):
+    user = request.user.username
+
+    # elasticsearch 연결
+    end_point = ELASTIC_CONFIG['url']
+    es = Elasticsearch(hosts=end_point)
+
+    # 검색 결과 수 제한 수정
+    es.indices.put_settings(index="repairshop",
+                            body={"index": {
+                                "max_result_window": 50000
+                            }})
+
+    # 검색 쿼리
+    res = es.search(index='logstash',
+                    body={"query": {"match": {"user": user}},
+                          "sort": [{"@timestamp": "desc"}]},
+                    size=1000
+                    )
+    res_list = [el['_source']['click_s_id'] for el in res['hits']['hits']]
+    new_list = [i for i in res_list if i != None]
+    result = []
+    i = 0
+    while i < 3 and i < len(new_list):
+        search = es.search(index='repairshop',
+                        body={"query": {"match": {"s_id": new_list[i]}}})
+        result.append(search['hits']['hits'][0]['_source'])
+        i+=1
+    return JsonResponse({"list": result})
+
+
 def side03(request):
+
+    # log_csv
+    with open('./log.csv', 'a') as f:
+        f.write(request.user.username + ',side03,,,')
+        f.write('\n')
+
     return render(request, 'side03.html')
 
 def elasticsearch(request):
@@ -158,6 +224,12 @@ def elasticsearch(request):
     words = request.GET.get('words')
     s_type = request.GET.get('s_type')
     running = request.GET.get('running')
+    print(words)
+
+    #log_csv
+    with open('./log.csv', 'a') as f:
+        f.write(request.user.username + ',,,,' + words)
+        f.write('\n')
 
     # 입력값이 없을 때
     if words == '':
@@ -173,10 +245,10 @@ def elasticsearch(request):
     es = Elasticsearch(hosts=end_point)
 
     # 검색할 index
-    index_name = 'repairs'
+    index_name = 'repairshop'
 
     # 검색 결과 수 제한 수정
-    es.indices.put_settings(index="repairs",
+    es.indices.put_settings(index="repairshop",
                             body={"index": {
                                 "max_result_window": 50000
                             }})
@@ -186,7 +258,8 @@ def elasticsearch(request):
                     query={
                         "query_string": {
                             "query":
-                                "(s_type: " + s_type + ") AND (running: " + running + ") AND (s_name: " + words + " OR address:" + words + ")"
+                                "(s_type: " + s_type + ") AND (running: " + running +
+                                ") AND (s_name: " + words + " OR address:" + words + ")"
                         }
                     },
                     size=50000)
