@@ -333,8 +333,8 @@ def main01(request):
                 'Crushed_2': [],
                 'Scratch_0': [],
                 'Seperated_1': [],
-                'id': [],
                 'car_name': [car_name],
+                'id': [],
             }
 
             repair_cost['id'].append(max_id)
