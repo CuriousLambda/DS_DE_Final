@@ -192,16 +192,15 @@
         <br>
         <div class="container00">
             <div class="image-upload" id="image-upload">
-                <form method="post" action="{%url 'upload'%}" enctype="multipart/form-data" id="submit">{%csrf_token%}
+                <form method="post" action="{%url 'main01'%}" enctype="multipart/form-data" id="submit">{%csrf_token%}
 
-                        <div class="button">
-                            <label for="chooseFile">
-                                <div class="buttonContainer">사진 선택하기</div>
-                            </label>
-                        </div>
+                    <div class="button">
+                        <label for="chooseFile">
+                            <div class="buttonContainer">사진 선택하기</div>
+                        </label>
+                    </div>
 
-                        <input type="file" id="chooseFile" name="chooseFile" accept="image/*" onchange="loadFile(this)">
-
+                    <input type="file" id="chooseFile" name="chooseFile" accept="image/*" onchange="loadFile(this)">
 
                     <div class="fileContainer">
                         <div class="fileInput">
@@ -216,7 +215,9 @@
                     <div style="width:40%; height:500px; position:relative; left:30%;">
                         <div class="image-show" id="image-show"></div>
                     </div>
+
                     <br>
+
                     <div style="text-align:center;">
                         <select name="car_name">
                             <option value="올뉴모닝">차량모델선택</option>
@@ -226,9 +227,10 @@
                         </select>
                         <br><br>
                         <div class="buttonContainer" style="margin:auto;">
-                            <button class="submitButton" type="submit" form="submit">수리견적 확인하기</button>
+                            <button class="submitButton" type="submit" form="submit" onclick="loading();">수리견적 확인하기</button>
                         </div>
                     </div>
+
                 </form>
             </div><br>
             {%if status == 'ok'%}
@@ -268,9 +270,6 @@
                 var newImage = document.getElementById('image-show').lastElementChild;
                 newImage.style.visibility = "visible";
 
-<!--                document.getElementById('image-upload').style.visibility = 'hidden';-->
-
-<!--                document.getElementById('fileName').textContent = null;     //기존 파일 이름 지우기-->
                 document.getElementById
             }
 
@@ -294,7 +293,7 @@
                 var container = document.getElementById('image-show');
                 container.appendChild(newImage);
             };
-
+        </script>
         <script>
             function loading(){
                 var loading = document.getElementById("loading");
@@ -309,7 +308,6 @@
             }
         </script>
 
-        </script>
         {%if request.user.is_superuser%}
             <script>
                 function admin(){
