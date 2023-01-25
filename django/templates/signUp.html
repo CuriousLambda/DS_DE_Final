@@ -119,14 +119,17 @@
                         <td><b>FIRST NAME</b></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="firstname">
-                        </td>
+			<td><input type="text" name="firstname" oninput="handleOnInput(this)"><br><br>
+				<p>▲영문으로 입력해 주세요.</p>
+			</td>
                     </tr>
                     <tr>
                         <td><b>LAST NAME</b></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="lastname"></td>
+			<td><input type="text" name="lastname" oninput="handleOnInput(this)"><br><br>
+				<p>▲영문으로 입력해 주세요.</p>
+			</td>
                     </tr>
                     <tr>
                         <td><b>PHONE NUMBER</b></td>
@@ -190,6 +193,12 @@
                 alert("로그인 후 이용 가능합니다.");
                 }
         </script>
+	<script>
+	    function handleOnInput(e) {
+ 	        e.value = e.value.replace(/[^A-Za-z]/ig, '');
+		}
+	</script>
+
         {% if success == "ok" %}
             <script>
                 alert("회원가입이 완료되었습니다.");

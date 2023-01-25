@@ -15,6 +15,9 @@ import matplotlib.pyplot as plt
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
+import certifi
+ca = certifi.where()
+
 def logging(logging_text):
     with open('./log_test.log', 'a') as f:
         f.write(logging_text)
@@ -142,7 +145,7 @@ def show_repairs(request):
     input_lon = float(request.GET.get('input_lon'))
 
     # 몽고db 연결
-    client = MongoClient(MONGODB_CONFIG['url'])
+    client = MongoClient(MONGODB_CONFIG['url'], tlsCAFile=ca)
     db = client['test']
 
     # 좌표값에서 반경 5km 이내에 있는 데이터 검색 쿼리

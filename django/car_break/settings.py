@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = DJANGO_CONFIG
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['surihasam.kro.kr']
 
 
 # Application definition
@@ -63,7 +63,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'C:/Users/lksun/DS_DE_Final/django/log.csv',
+            'filename': '/home/godjy52/project/case02/django/log.csv',
         },
         'logstash': {
             'level': 'DEBUG',
