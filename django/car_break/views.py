@@ -109,7 +109,7 @@ def signUp(request):
 def main(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'main' + ',' + ','
+    logging_text = request.user.username + ',' + 'main' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
     return render(request, 'main.html')
 
@@ -121,7 +121,7 @@ def side02(request):
 
 def show_repairs(request):
     # logging
-    logging_text = request.user.username + ',' + 'show_near_repairshop' + ',' + ','
+    logging_text = request.user.username + ',' + 'show_near_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
     # 좌표값 get
     input_lat = float(request.GET.get('input_lat'))
@@ -161,7 +161,7 @@ def marker_click(request):
     # s_id = request.GET.get('s_id')
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'clicked_repairshop' + ',' + ',' + s_name
+    logging_text = request.user.username + ',' + 'clicked_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ',' + s_name
     logging(logging_text)
     return HttpResponse(s_name)
 
@@ -208,7 +208,7 @@ def elasticsearch(request):
 
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'search_repairshop' + ',' + ',' + words
+    logging_text = request.user.username + ',' + 'search_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ',' + words
     logging(logging_text)
 
     # 입력값이 없을 때
@@ -257,7 +257,7 @@ def admin(request):
 def main01(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'show_cost' + ',' + ','
+    logging_text = request.user.username + ',' + 'show_cost' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
 
     res_data = dict()
@@ -574,7 +574,7 @@ def codeD(request):
 def rate(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'acc_rate' + ',' + ','
+    logging_text = request.user.username + ',' + 'acc_rate' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
     data = request.body.decode('utf-8')
     main_code = data.split('&')[0][-1]
