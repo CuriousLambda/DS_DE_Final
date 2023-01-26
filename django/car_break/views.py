@@ -15,8 +15,6 @@ import matplotlib.pyplot as plt
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-import certifi
-ca = certifi.where()
 import json
 import csv
 from django.http import HttpResponse, JsonResponse
@@ -110,7 +108,7 @@ def signUp(request):
 def main(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'main' + ',' + ','
+    logging_text = request.user.username + ',' + 'main' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
     return render(request, 'main.html')
 
@@ -122,14 +120,14 @@ def side02(request):
 
 def show_repairs(request):
     # logging
-    logging_text = request.user.username + ',' + 'show_near_repairshop' + ',' + ','
+    logging_text = request.user.username + ',' + 'show_near_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
     # 좌표값 get
     input_lat = float(request.GET.get('input_lat'))
     input_lon = float(request.GET.get('input_lon'))
 
     # 몽고db 연결
-    client = MongoClient(MONGODB_CONFIG['url'], tlsCAFile=ca)
+    client = MongoClient(MONGODB_CONFIG['url'])
     db = client['test']
 
     # 좌표값에서 반경 5km 이내에 있는 데이터 검색 쿼리
@@ -161,7 +159,7 @@ def marker_click(request):
     s_id = request.GET.get('s_id')
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'clicked_repairshop' + ',' + ',' + ',' + s_name + ',' + s_id
+    logging_text = request.user.username + ',' + 'clicked_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ',' + ',' + s_name + ',' + s_id
     logging(logging_text)
     return HttpResponse(s_name)
 
@@ -208,7 +206,7 @@ def elasticsearch(request):
 
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'search_repairshop' + ',' + ',' + words
+    logging_text = request.user.username + ',' + 'search_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ',' + words
     logging(logging_text)
 
     # 입력값이 없을 때
@@ -257,7 +255,7 @@ def admin(request):
 def main01(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'show_cost' + ',' + ','
+    logging_text = request.user.username + ',' + 'show_cost' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
 
     res_data = dict()
@@ -383,13 +381,15 @@ def user(request):
 #       과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율       #
 #####################################################################
 
+static_dir = '/home/godjy52/project/case04/django/static/'
+
 def codeA(request):
     main_code = request.body.decode('utf-8')[-1]
 
     def make_resdict1(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile, 'r') as jf:
             jsondata = json.load(jf)
             keys = jsondata.keys()
@@ -435,8 +435,8 @@ def codeB(request):
 
     def make_resdict2(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             for i in jsondata[code_A]:
@@ -482,8 +482,8 @@ def codeC(request):
 
     def make_resdict3(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             for i in jsondata[code_A][0][code_B]:
@@ -530,8 +530,8 @@ def codeD(request):
 
     def make_resdict4(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             for i in jsondata[code_A][0][code_B][0][code_C]:
@@ -572,7 +572,7 @@ def codeD(request):
 def rate(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'acc_rate' + ',' + ','
+    logging_text = request.user.username + ',' + 'acc_rate' + ',' + request.META.get('REMOTE_ADDR') + ','
     logging(logging_text)
     data = request.body.decode('utf-8')
     main_code = data.split('&')[0][-1]
@@ -582,7 +582,7 @@ def rate(request):
     code_D = data.split('&')[4][7:]
 
     def make_rate(case):
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
+        jsonfile = static_dir + case + '_code.json'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             rate_list = jsondata[code_A][0][code_B][0][code_C][0][code_D]

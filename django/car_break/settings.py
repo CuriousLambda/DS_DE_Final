@@ -29,6 +29,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['surihasam.kro.kr']
 
+CSRF_TRUSTED_ORIGINS = ['https://surihasam.kro.kr', 'http://surihasam.kro.kr']
 
 # Application definition
 
