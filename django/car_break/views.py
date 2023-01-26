@@ -15,8 +15,6 @@ import matplotlib.pyplot as plt
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-import certifi
-ca = certifi.where()
 import json
 import csv
 from django.http import HttpResponse, JsonResponse
@@ -130,7 +128,7 @@ def show_repairs(request):
     input_lon = float(request.GET.get('input_lon'))
 
     # 몽고db 연결
-    client = MongoClient(MONGODB_CONFIG['url'], tlsCAFile=ca)
+    client = MongoClient(MONGODB_CONFIG['url'])
     db = client['test']
 
     # 좌표값에서 반경 5km 이내에 있는 데이터 검색 쿼리
