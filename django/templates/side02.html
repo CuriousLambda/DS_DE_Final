@@ -54,7 +54,32 @@
             border-radius: 5px;
             cursor: pointer;
             }
-
+        #center{
+            width:900px;
+            height:80px;
+            margin:auto;
+            margin-top:30px;
+            text-align: center
+        }
+        #map{
+             width:900px;
+             height:600px;
+             margin:auto;
+             margin-bottom:30px
+        }
+        @media ( max-width: 480px ) {
+                #center {
+                  width: auto;
+                }
+                #map {
+                  float: none;
+                  width: auto;
+                }
+                #list {
+                  float: none;
+                  width: auto;
+                }
+        }
         </style>
     </head>
     <body>
@@ -95,11 +120,11 @@
         <p id="lat" type ="text"></p>
         <p id="lon" type ="text"></p>
 
-        <div style="width:900px;height:80px;margin:auto;margin-top:30px;text-align: center">
+        <div id='center'>
             <button id='btn' class = "btn btn-outline-dark mt-auto" type="button" style="width:150px;height:50px;margin:auto">정비소 찾기</button>
         </div>
 
-        <div id="map" style="width:900px;height:600px;margin:auto;margin-bottom:30px"></div>
+        <div id="map"></div>
 
 
         <div id="list">
