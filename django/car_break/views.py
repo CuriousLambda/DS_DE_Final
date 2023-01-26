@@ -20,8 +20,7 @@ import csv
 from django.http import HttpResponse, JsonResponse
 
 # 로그 쓰는 함수
-# id, main_function, client_ip, searched_word
-# ip는 geoip source로, lat, lon은 잠깐 보류
+# id, main_function, client_ip, searched_word, clicked_repairshop_name, clicked_repairshop_id
 def logging(logging_text):
     with open('./django_log.log', 'a') as f:
         f.write(logging_text)
@@ -157,11 +156,10 @@ def show_repairs(request):
 
 def marker_click(request):
     s_name = request.GET.get('s_name')
-    # s_id 어떤 데이턴지 물어봐야됨
-    # s_id = request.GET.get('s_id')
+    s_id = request.GET.get('s_id')
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'clicked_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ',' + s_name
+    logging_text = request.user.username + ',' + 'clicked_repairshop' + ',' + request.META.get('REMOTE_ADDR') + ',' + ',' + s_name + ',' + s_id
     logging(logging_text)
     return HttpResponse(s_name)
 
@@ -173,18 +171,18 @@ def click_log(request):
     es = Elasticsearch(hosts=end_point)
 
     # 검색 결과 수 제한 수정
-    es.indices.put_settings(index="repairshop",
+    es.indices.put_settings(index="logstash",
                             body={"index": {
                                 "max_result_window": 50000
                             }})
 
     # 검색 쿼리
     res = es.search(index='logstash',
-                    body={"query": {"match": {"user": user}},
+                    body={"query": {"match": {"id": user}},
                           "sort": [{"@timestamp": "desc"}]},
                     size=1000
                     )
-    res_list = [el['_source']['click_s_id'] for el in res['hits']['hits']]
+    res_list = [el['_source']['clicked_repairshop_id'] for el in res['hits']['hits']]
     new_list = [i for i in res_list if i != None]
     result = []
     i = 0
