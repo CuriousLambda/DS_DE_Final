@@ -381,7 +381,7 @@ def user(request):
 #       과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율       #
 #####################################################################
 
-static_dir = '/home/godjy52/project/case04/django/static/'
+static_dir = '/home/godjy52/project/django/static/'
 
 def codeA(request):
     main_code = request.body.decode('utf-8')[-1]

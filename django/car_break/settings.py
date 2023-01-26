@@ -27,9 +27,7 @@ SECRET_KEY = DJANGO_CONFIG
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['surihasam.kro.kr']
-
-CSRF_TRUSTED_ORIGINS = ['https://surihasam.kro.kr', 'http://surihasam.kro.kr']
+ALLOWED_HOSTS = ['surihasam.r-e.kr']
 
 # Application definition
 
@@ -48,7 +46,7 @@ INSTALLED_APPS = [
 
 ELASTICSEARCH_DSL={
     'default': {
-      'hosts': 'localhost:9200'
+      'hosts': '34.64.199.58:9200'
     },
 }
 
@@ -64,7 +62,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/home/godjy52/project/case02/django/log.csv',
+            'filename': '/home/godjy52/project/django/django_log.log',
         },
         'logstash': {
             'level': 'DEBUG',
