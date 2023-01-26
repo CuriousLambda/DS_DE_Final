@@ -383,13 +383,15 @@ def user(request):
 #       과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율 과실비율       #
 #####################################################################
 
+static_dir = '/home/godjy52/project/case04/django/static/'
+
 def codeA(request):
     main_code = request.body.decode('utf-8')[-1]
 
     def make_resdict1(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile, 'r') as jf:
             jsondata = json.load(jf)
             keys = jsondata.keys()
@@ -435,8 +437,8 @@ def codeB(request):
 
     def make_resdict2(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             for i in jsondata[code_A]:
@@ -482,8 +484,8 @@ def codeC(request):
 
     def make_resdict3(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             for i in jsondata[code_A][0][code_B]:
@@ -530,8 +532,8 @@ def codeD(request):
 
     def make_resdict4(case):
         res_dict = {}
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
-        csvfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/' + case + '_text.csv'
+        jsonfile = static_dir + case + '_code.json'
+        csvfile = static_dir + case + '_text.csv'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             for i in jsondata[code_A][0][code_B][0][code_C]:
@@ -582,7 +584,7 @@ def rate(request):
     code_D = data.split('&')[4][7:]
 
     def make_rate(case):
-        jsonfile = '/Users/j/Downloads/DS_DE_Final-develop/django/static/'+ case + '_code.json'
+        jsonfile = static_dir + case + '_code.json'
         with open(jsonfile) as jf:
             jsondata = json.load(jf)
             rate_list = jsondata[code_A][0][code_B][0][code_C][0][code_D]
