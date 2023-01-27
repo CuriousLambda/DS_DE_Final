@@ -116,7 +116,7 @@ def signUp(request):
 def main(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'main' + ',' + get_client_ip(request) + ','
+    logging_text = request.user.username + ',' + 'main' + ',' + get_client_ip(request) + ',' + ',' + ','
     logging(logging_text)
     return render(request, 'main.html')
 
@@ -128,7 +128,7 @@ def side02(request):
 
 def show_repairs(request):
     # logging
-    logging_text = request.user.username + ',' + 'show_near_repairshop' + ',' + get_client_ip(request) + ','
+    logging_text = request.user.username + ',' + 'show_near_repairshop' + ',' + get_client_ip(request) + ',' + ',' + ','
     logging(logging_text)
     # 좌표값 get
     input_lat = float(request.GET.get('input_lat'))
@@ -214,7 +214,7 @@ def elasticsearch(request):
 
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'search_repairshop' + ',' + get_client_ip(request) + ',' + words
+    logging_text = request.user.username + ',' + 'search_repairshop' + ',' + get_client_ip(request) + ',' + words + ',' + ','
     logging(logging_text)
 
     # 입력값이 없을 때
@@ -263,7 +263,7 @@ def admin(request):
 def main01(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'show_cost' + ',' + get_client_ip(request) + ','
+    logging_text = request.user.username + ',' + 'show_cost' + ',' + get_client_ip(request) + ',' + ',' + ','
     logging(logging_text)
 
     res_data = dict()
@@ -580,7 +580,7 @@ def codeD(request):
 def rate(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'acc_rate' + ',' + get_client_ip(request) + ','
+    logging_text = request.user.username + ',' + 'acc_rate' + ',' + get_client_ip(request) + ',' + ',' + ','
     logging(logging_text)
     data = request.body.decode('utf-8')
     main_code = data.split('&')[0][-1]
