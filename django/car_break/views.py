@@ -25,6 +25,14 @@ def logging(logging_text):
     with open('./django_log.log', 'a') as f:
         f.write(logging_text)
         f.write('\n')
+# get ip
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 def index(request):
     return render(request, 'index.html')
@@ -572,7 +580,7 @@ def codeD(request):
 def rate(request):
     # logging
     # id, main_function, client_ip, searched_word
-    logging_text = request.user.username + ',' + 'acc_rate' + ',' + request.META.get('REMOTE_ADDR') + ','
+    logging_text = request.user.username + ',' + 'acc_rate' + ',' + get_client_ip(request) + ','
     logging(logging_text)
     data = request.body.decode('utf-8')
     main_code = data.split('&')[0][-1]
